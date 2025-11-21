@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LLM Q&A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>LLM Question & Answer</h1>
+    <form id="qaForm">
+      <textarea id="question" placeholder="Type your question here..." rows="4"></textarea>
+      <button type="submit">Ask</button>
+    </form>
+
+    <div id="results" style="display:none;">
+      <h2>Processed question</h2>
+      <p id="processed"></p>
+
+      <h2>LLM Answer</h2>
+      <pre id="answer"></pre>
+    </div>
+  </div>
+
+<script>
+document.getElementById("qaForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const q = document.getElementById("question").value;
+  const resBox = document.getElementById("results");
+  resBox.style.display = "none";
+
+  try {
+    const resp = await fetch("/ask", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({question: q})
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      document.getElementById("processed").innerText = data.processed;
+      document.getElementById("answer").innerText = data.answer;
+      resBox.style.display = "block";
+    } else {
+      alert("Error: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Network error: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
+

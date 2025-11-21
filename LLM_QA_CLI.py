@@ -5,10 +5,10 @@ from google.genai import Client, types
 
 # Load your API key from .env
 load_dotenv()
-API_KEY = os.getenv("GENAI_API_KEY")
+API_KEY = os.getenv("GEMINI_API_KEY ")
 
 if not API_KEY:
-    raise ValueError("Please set your GENAI_API_KEY in the .env file.")
+    raise ValueError("Please set your GEMINI_API_KEY  in the .env file.")
 
 # Initialize the client
 client = Client(api_key=API_KEY)
